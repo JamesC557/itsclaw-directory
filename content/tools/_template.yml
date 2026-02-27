@@ -1,0 +1,29 @@
+name: "My Tool"
+slug: my-tool
+one_liner: "One sentence about what it does"
+
+type: tool # skill|plugin|tool|template|example
+categories:
+  - Automation
+
+tags:
+  - openclaw
+
+status: beta # active|beta|experimental|abandoned
+
+links:
+  repo: https://github.com/user/repo
+  docs: https://example.com
+  demo: https://example.com
+
+install:
+  - "npm i -g my-tool"
+
+compatibility:
+  notes: "Any important constraints"
+  openclaw: ">=0.0.0"
+  node: ">=20"
+
+author: "Your name"
+license: MIT
+last_verified: 2026-02-27

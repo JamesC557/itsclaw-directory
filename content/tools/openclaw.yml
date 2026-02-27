@@ -1,6 +1,10 @@
 name: OpenClaw
 slug: openclaw
 one_liner: Agentic personal assistant runtime with tools, skills, and channels.
+description: |
+  OpenClaw is the runtime + gateway that lets you wire tools, channels, skills,
+  cron, browser automation, and nodes into a single assistant.
+featured: true
 type: tool
 categories:
   - Automation

@@ -7,7 +7,9 @@ const CONTENT_DIR = path.join(process.cwd(), 'content', 'tools');
 
 async function main() {
   const entries = await fs.readdir(CONTENT_DIR);
-  const files = entries.filter((f) => f.endsWith('.yml') || f.endsWith('.yaml'));
+  const files = entries.filter(
+    (f) => (f.endsWith('.yml') || f.endsWith('.yaml')) && !f.startsWith('_')
+  );
 
   const errors: string[] = [];
 

@@ -1,6 +1,8 @@
 name: Weather Skill
 slug: weather
 one_liner: Fetch current weather and forecasts (no API key).
+description: |
+  A built-in skill to fetch weather/forecast quickly.
 type: skill
 categories:
   - Automation

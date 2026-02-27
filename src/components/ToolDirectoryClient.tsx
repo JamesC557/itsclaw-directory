@@ -13,6 +13,7 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
   const [type, setType] = useState<string>('');
   const [status, setStatus] = useState<string>('');
   const [category, setCategory] = useState<string>('');
+  const [sort, setSort] = useState<string>('featured');
 
   const allTypes = useMemo(() => uniq(tools.map((t) => t.type)), [tools]);
   const allStatuses = useMemo(() => uniq(tools.map((t) => t.status)), [tools]);
@@ -23,7 +24,8 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    return tools.filter((t) => {
+
+    const rows = tools.filter((t) => {
       if (type && t.type !== type) return false;
       if (status && t.status !== status) return false;
       if (category && !(t.categories ?? []).includes(category)) return false;
@@ -32,6 +34,7 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
       const hay = [
         t.name,
         t.one_liner,
+        t.description ?? '',
         t.slug,
         ...(t.tags ?? []),
         ...(t.categories ?? []),
@@ -41,11 +44,26 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
 
       return hay.includes(needle);
     });
-  }, [tools, q, type, status, category]);
+
+    const byName = (a: Tool, b: Tool) => a.name.localeCompare(b.name);
+    const byLastVerified = (a: Tool, b: Tool) =>
+      String(b.last_verified ?? '').localeCompare(String(a.last_verified ?? ''));
+
+    if (sort === 'new') return [...rows].sort(byLastVerified);
+    if (sort === 'name') return [...rows].sort(byName);
+
+    // featured (default)
+    return [...rows].sort((a, b) => {
+      const fa = a.featured ? 1 : 0;
+      const fb = b.featured ? 1 : 0;
+      if (fa !== fb) return fb - fa;
+      return byName(a, b);
+    });
+  }, [tools, q, type, status, category, sort]);
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-3 md:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-5">
         <input
           className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 outline-none focus:ring-2 focus:ring-white/20"
           placeholder="Search tools, tags, categories…"
@@ -90,6 +108,16 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
               {v}
             </option>
           ))}
+        </select>
+
+        <select
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="featured">Sort: Featured</option>
+          <option value="new">Sort: New</option>
+          <option value="name">Sort: Name</option>
         </select>
       </div>
 

@@ -14,7 +14,7 @@ export default function SubmitPage() {
         <h2 className="text-lg font-semibold">How to add</h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-white/80">
           <li>Fork the repo.</li>
-          <li>Add a YAML file to <code className="rounded bg-white/10 px-1">content/tools</code>.</li>
+          <li>Add a YAML file to <code className="rounded bg-white/10 px-1">content/tools</code> (use <code className="rounded bg-white/10 px-1">content/templates/tool.yml</code> as a base).</li>
           <li>Open a PR with a short description + screenshots if possible.</li>
         </ol>
 
@@ -23,6 +23,10 @@ export default function SubmitPage() {
 {`name: "My Tool"
 slug: my-tool
 one_liner: "One sentence about what it does"
+description: |
+  Longer description. Can be multi-line.
+featured: false
+
 type: tool # skill|plugin|tool|template|example
 categories: [Automation]
 tags: [openclaw]
@@ -36,7 +40,7 @@ compatibility:
   notes: "Any important constraints"
 author: "Your name"
 license: MIT
-last_verified: 2026-02-24
+last_verified: 2026-02-27
 `}
         </pre>
       </div>

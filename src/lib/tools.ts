@@ -10,9 +10,11 @@ export const ToolSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
   one_liner: z.string().min(1),
+  description: z.string().optional(),
   type: ToolType,
   categories: z.array(z.string().min(1)).default([]),
   tags: z.array(z.string().min(1)).default([]),
+  featured: z.boolean().optional(),
   status: ToolStatus,
   links: z
     .object({

@@ -15,7 +15,15 @@ export const ToolSchema = z.object({
   categories: z.array(z.string().min(1)).default([]),
   tags: z.array(z.string().min(1)).default([]),
   featured: z.boolean().optional(),
+  featured_rank: z.number().int().nonnegative().optional(),
   status: ToolStatus,
+  sponsor: z
+    .object({
+      tier: z.string().min(1),
+      label: z.string().min(1).optional(),
+      href: z.string().url().optional(),
+    })
+    .optional(),
   metrics: z
     .object({
       revenue_30d: z.number().nonnegative().optional(),
@@ -76,7 +84,13 @@ export async function getAllTools(): Promise<Tool[]> {
     tools.push(tool);
   }
 
-  tools.sort((a, b) => a.name.localeCompare(b.name));
+  // Default sort: paid/featured first, then name.
+  tools.sort((a, b) => {
+    const ar = a.featured_rank ?? (a.featured ? 9999 : -1);
+    const br = b.featured_rank ?? (b.featured ? 9999 : -1);
+    if (ar !== br) return br - ar;
+    return a.name.localeCompare(b.name);
+  });
   return tools;
 }
 

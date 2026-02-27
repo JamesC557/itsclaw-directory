@@ -4,6 +4,11 @@ one_liner: "One sentence about what it does"
 description: |
   Longer description. Can be multi-line.
 featured: false
+featured_rank:
+sponsor:
+  tier:
+  label:
+  href:
 metrics:
   revenue_30d:
   mrr:

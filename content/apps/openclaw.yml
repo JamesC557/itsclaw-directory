@@ -5,6 +5,11 @@ description: |
   OpenClaw is the runtime + gateway that lets you wire tools, channels, skills,
   cron, browser automation, and nodes into a single assistant.
 featured: true
+featured_rank: 100
+sponsor:
+  tier: gold
+  label: "Sponsor"
+  href: "https://docs.openclaw.ai"
 type: app
 categories:
   - Platform

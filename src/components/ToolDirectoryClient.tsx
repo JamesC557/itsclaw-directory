@@ -58,11 +58,11 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
     if (sort === 'new') return [...rows].sort(byLastVerified);
     if (sort === 'name') return [...rows].sort(byName);
 
-    // featured (default)
+    // featured (default): paid/featured first
     return [...rows].sort((a, b) => {
-      const fa = a.featured ? 1 : 0;
-      const fb = b.featured ? 1 : 0;
-      if (fa !== fb) return fb - fa;
+      const ar = a.featured_rank ?? (a.featured ? 9999 : -1);
+      const br = b.featured_rank ?? (b.featured ? 9999 : -1);
+      if (ar !== br) return br - ar;
       return byName(a, b);
     });
   }, [tools, q, status, category, sort]);

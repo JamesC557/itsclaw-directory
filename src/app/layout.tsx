@@ -21,8 +21,8 @@ export default function RootLayout({
               itsclaw
             </Link>
             <nav className="flex items-center gap-4 text-sm text-white/80">
-              <Link className="hover:text-white" href="/directory">
-                Directory
+              <Link className="hover:text-white" href="/apps">
+                Apps
               </Link>
               <Link className="hover:text-white" href="/submit">
                 Submit

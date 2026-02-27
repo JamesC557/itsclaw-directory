@@ -4,8 +4,14 @@ one_liner: "One sentence about what it does"
 description: |
   Longer description. Can be multi-line.
 featured: false
+badges: []
+metrics:
+  revenue_30d:
+  mrr:
+  total:
+  currency: "$"
 
-type: tool # skill|plugin|tool|template|example
+type: app
 categories:
   - Automation
 

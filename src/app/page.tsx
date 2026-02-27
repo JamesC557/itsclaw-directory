@@ -9,16 +9,16 @@ export default function Home() {
           OpenClaw ecosystem directory
         </h1>
         <p className="mt-4 max-w-2xl text-white/70">
-          A curated list of skills, plugins, and tools built on top of OpenClaw.
-          Find what to install next — or submit your own.
+          A curated list of apps and services built around OpenClaw.
+          Find what to try next — or submit your own.
         </p>
 
         <div className="mt-7 flex flex-wrap gap-3">
           <Link
-            href="/directory"
+            href="/apps"
             className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black"
           >
-            Browse directory
+            Browse apps
           </Link>
           <Link
             href="/submit"

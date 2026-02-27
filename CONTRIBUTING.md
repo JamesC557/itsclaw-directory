@@ -5,7 +5,7 @@ Thanks for contributing!
 ## Add a new tool
 
 1. Fork the repo.
-2. Add a YAML file to `content/tools/` (copy `content/templates/tool.yml`).
+2. Add a YAML file to `content/apps/` (copy `content/templates/tool.yml`).
 3. Run locally:
    - `npm i`
    - `npm run validate:tools`

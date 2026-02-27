@@ -4,10 +4,10 @@ one_liner: Send/receive iMessage via BlueBubbles as an OpenClaw channel plugin.
 description: |
   Use the BlueBubbles server to bridge iMessage into OpenClaw via a channel plugin.
 featured: true
-type: plugin
+type: app
 categories:
-  - Messaging
   - Integrations
+  - Messaging
 tags:
   - imessage
   - webhook

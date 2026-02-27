@@ -3,7 +3,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { ToolSchema } from '@/lib/tools';
 
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'tools');
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'apps');
 
 async function main() {
   const entries = await fs.readdir(CONTENT_DIR);

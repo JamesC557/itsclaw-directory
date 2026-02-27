@@ -3,8 +3,8 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { z } from 'zod';
 
-export const ToolType = z.enum(['skill', 'plugin', 'tool', 'template', 'example']);
-export const ToolStatus = z.enum(['active', 'beta', 'experimental', 'abandoned']);
+export const ToolType = z.enum(['app']);
+export const ToolStatus = z.enum(['active', 'beta', 'experimental', 'abandoned', 'for-sale']);
 
 export const ToolSchema = z.object({
   name: z.string().min(1),
@@ -15,7 +15,16 @@ export const ToolSchema = z.object({
   categories: z.array(z.string().min(1)).default([]),
   tags: z.array(z.string().min(1)).default([]),
   featured: z.boolean().optional(),
+  badges: z.array(z.string().min(1)).default([]),
   status: ToolStatus,
+  metrics: z
+    .object({
+      revenue_30d: z.number().nonnegative().optional(),
+      mrr: z.number().nonnegative().optional(),
+      total: z.number().nonnegative().optional(),
+      currency: z.string().min(1).optional(),
+    })
+    .optional(),
   links: z
     .object({
       repo: z.string().url().optional(),
@@ -41,7 +50,7 @@ export const ToolSchema = z.object({
 
 export type Tool = z.infer<typeof ToolSchema>;
 
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'tools');
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'apps');
 
 async function readYamlFile(filePath: string): Promise<unknown> {
   const raw = await fs.readFile(filePath, 'utf8');
@@ -49,6 +58,8 @@ async function readYamlFile(filePath: string): Promise<unknown> {
 }
 
 export async function getAllTools(): Promise<Tool[]> {
+  // Apps directory: we keep the function name for now to avoid churn in imports.
+
   let entries: string[] = [];
   try {
     entries = await fs.readdir(CONTENT_DIR);

@@ -1,0 +1,23 @@
+name: OpenClaw
+slug: openclaw
+one_liner: Agentic personal assistant runtime with tools, skills, and channels.
+type: tool
+categories:
+  - Automation
+  - Integrations
+tags:
+  - gateway
+  - skills
+  - plugins
+status: active
+links:
+  repo: https://github.com/openclaw/openclaw
+  docs: https://docs.openclaw.ai
+install:
+  - npm i -g openclaw
+  - openclaw status
+compatibility:
+  notes: Works best with Node 20+.
+author: OpenClaw
+license: MIT
+last_verified: 2026-02-24

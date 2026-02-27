@@ -1,0 +1,20 @@
+name: Weather Skill
+slug: weather
+one_liner: Fetch current weather and forecasts (no API key).
+type: skill
+categories:
+  - Automation
+tags:
+  - forecast
+  - no-api-key
+status: active
+links:
+  repo: https://github.com/openclaw/openclaw
+  docs: https://docs.openclaw.ai
+install:
+  - "Bundled with OpenClaw skills (see skills/weather)."
+compatibility:
+  notes: Works in any OpenClaw install with network access.
+author: OpenClaw
+license: MIT
+last_verified: 2026-02-24

@@ -24,6 +24,9 @@ export default function RootLayout({
               <Link className="hover:text-white" href="/apps">
                 Apps
               </Link>
+              <Link className="hover:text-white" href="/dashboard">
+                Dashboard
+              </Link>
               <Link className="hover:text-white" href="/submit">
                 Submit
               </Link>

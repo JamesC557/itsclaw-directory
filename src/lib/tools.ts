@@ -3,7 +3,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { z } from 'zod';
 
-export const ToolType = z.enum(['app']);
+export const ToolType = z.enum(['app']); // legacy
 export const ToolStatus = z.enum(['active', 'beta', 'experimental', 'abandoned']);
 
 export const ToolSchema = z.object({
@@ -59,7 +59,7 @@ export const ToolSchema = z.object({
 
 export type Tool = z.infer<typeof ToolSchema>;
 
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'apps');
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'apps'); // legacy YAML source (will be removed once Mongo-backed directory is fully validated)
 
 async function readYamlFile(filePath: string): Promise<unknown> {
   const raw = await fs.readFile(filePath, 'utf8');

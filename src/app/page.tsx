@@ -24,6 +24,12 @@ export default function Home() {
             href="/submit"
             className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold"
           >
+            Submit
+          </Link>
+          <Link
+            href="/submit"
+            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold"
+          >
             Submit a tool
           </Link>
         </div>

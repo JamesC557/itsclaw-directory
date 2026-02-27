@@ -25,9 +25,11 @@ tags:
 status: beta # active|beta|experimental|abandoned
 
 links:
+  website: https://example.com
   repo: https://github.com/user/repo
   docs: https://example.com
   demo: https://example.com
+x_handle: "@yourhandle"
 
 install:
   - "npm i -g my-tool"

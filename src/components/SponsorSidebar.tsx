@@ -14,7 +14,7 @@ export default function SponsorSidebar({ tools }: { tools: Tool[] }) {
         {sponsors.map((s) => (
           <a
             key={s.slug}
-            href={s.sponsor?.href ?? s.links?.repo ?? '#'}
+            href={s.sponsor?.href ?? s.links?.website ?? s.links?.repo ?? '#'}
             target="_blank"
             className="block rounded-2xl border border-white/10 bg-white/5 p-4 hover:bg-white/10"
           >

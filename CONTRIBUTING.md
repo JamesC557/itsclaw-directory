@@ -15,8 +15,8 @@ Thanks for contributing!
 ## Requirements
 
 - A short, accurate `one_liner`.
-- `status` set correctly.
-- Add a repo link when possible.
+- Add a `links.website`.
+- Add `x_handle` (X/Twitter) for attribution.
 - Prefer stable slugs: lowercase, numbers, dashes.
 
 ## Notes

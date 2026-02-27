@@ -34,11 +34,13 @@ export const ToolSchema = z.object({
     .optional(),
   links: z
     .object({
+      website: z.string().url().optional(),
       repo: z.string().url().optional(),
       docs: z.string().url().optional(),
       demo: z.string().url().optional(),
     })
     .default({}),
+  x_handle: z.string().optional(),
   install: z.array(z.string().min(1)).default([]),
   compatibility: z
     .object({

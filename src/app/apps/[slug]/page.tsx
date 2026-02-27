@@ -99,10 +99,17 @@ export default async function AppPage({
           <div>
             <h2 className="text-sm font-semibold text-white/80">Links</h2>
             <ul className="mt-2 space-y-1 text-sm">
+              {tool.links?.website ? (
+                <li>
+                  <a className="text-white underline" href={tool.links.website} target="_blank">
+                    Website
+                  </a>
+                </li>
+              ) : null}
               {tool.links?.repo ? (
                 <li>
                   <a className="text-white underline" href={tool.links.repo} target="_blank">
-                    Website / Repo
+                    Repo
                   </a>
                 </li>
               ) : null}

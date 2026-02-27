@@ -44,7 +44,6 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
         t.slug,
         ...(t.tags ?? []),
         ...(t.categories ?? []),
-        ...(t.badges ?? []),
       ]
         .join(' ')
         .toLowerCase();
@@ -128,18 +127,6 @@ export default function ToolDirectoryClient({ tools }: { tools: Tool[] }) {
               <div>
                 <div className="text-lg font-semibold">{t.name}</div>
                 <div className="mt-1 text-sm text-white/70">{t.one_liner}</div>
-                {(t.badges ?? []).length ? (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {t.badges.slice(0, 3).map((b) => (
-                      <span
-                        key={b}
-                        className="rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-[11px] text-white/80"
-                      >
-                        {b}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
               </div>
 
               <div className="shrink-0 rounded-full border border-white/10 bg-black/20 px-2 py-1 text-xs text-white/80">

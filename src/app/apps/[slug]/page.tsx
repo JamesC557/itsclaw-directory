@@ -43,22 +43,8 @@ export default async function AppPage({
             ) : null}
           </div>
 
-          <div className="flex flex-col items-end gap-2">
-            <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-sm text-white/80">
-              {tool.status}
-            </div>
-            {(tool.badges ?? []).length ? (
-              <div className="flex flex-wrap justify-end gap-2">
-                {tool.badges.map((b) => (
-                  <div
-                    key={b}
-                    className="rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-xs text-white/80"
-                  >
-                    {b}
-                  </div>
-                ))}
-              </div>
-            ) : null}
+          <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-sm text-white/80">
+            {tool.status}
           </div>
         </div>
 

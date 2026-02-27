@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import { z } from 'zod';
 
 export const ToolType = z.enum(['app']);
-export const ToolStatus = z.enum(['active', 'beta', 'experimental', 'abandoned', 'for-sale']);
+export const ToolStatus = z.enum(['active', 'beta', 'experimental', 'abandoned']);
 
 export const ToolSchema = z.object({
   name: z.string().min(1),
@@ -15,7 +15,6 @@ export const ToolSchema = z.object({
   categories: z.array(z.string().min(1)).default([]),
   tags: z.array(z.string().min(1)).default([]),
   featured: z.boolean().optional(),
-  badges: z.array(z.string().min(1)).default([]),
   status: ToolStatus,
   metrics: z
     .object({

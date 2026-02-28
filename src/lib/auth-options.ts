@@ -1,10 +1,10 @@
 import type { NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
-import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import clientPromise from '@/lib/mongodb';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { prisma } from '@/lib/prisma';
 import { Resend } from 'resend';
 
-const isConfigured = Boolean(process.env.MONGODB_URI && process.env.RESEND_API_KEY);
+const isConfigured = Boolean(process.env.DATABASE_URL && process.env.RESEND_API_KEY);
 
 function getResend() {
   const key = process.env.RESEND_API_KEY;
@@ -14,7 +14,7 @@ function getResend() {
 
 export const authOptions: NextAuthOptions = isConfigured
   ? {
-      adapter: MongoDBAdapter(clientPromise as any),
+      adapter: PrismaAdapter(prisma as any),
       pages: {
         signIn: '/login',
       },
@@ -42,9 +42,14 @@ export const authOptions: NextAuthOptions = isConfigured
           },
         }),
       ],
+      callbacks: {
+        async session({ session, user }) {
+          if (session.user) (session.user as any).id = (user as any).id;
+          return session;
+        },
+      },
     }
   : {
-      // Build-safe fallback (no auth). Real auth requires env vars.
       pages: {
         signIn: '/login',
       },

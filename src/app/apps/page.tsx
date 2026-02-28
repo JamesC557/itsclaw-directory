@@ -2,6 +2,8 @@ import SponsorSidebar from '@/components/SponsorSidebar';
 import Link from 'next/link';
 import { getPublicApps } from '@/lib/db/apps';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Apps — itsclaw',
 };
@@ -20,7 +22,7 @@ export default async function AppsPage() {
 
   // Sponsor sidebar expects Tool shape; we keep it minimal by mapping.
   const sponsorTools = apps.map((a) => ({
-    slug: a._id,
+    slug: a.id,
     name: a.name,
     one_liner: a.one_liner,
     sponsor: a.sponsor,
@@ -49,7 +51,7 @@ export default async function AppsPage() {
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {apps.map((a) => (
               <a
-                key={a._id}
+                key={a.id}
                 href={a.website}
                 target="_blank"
                 className="rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/10"

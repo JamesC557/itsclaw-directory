@@ -1,9 +1,13 @@
-import clientPromise from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
+import { prisma } from '@/lib/prisma';
+
+function requireDb() {
+  if (!prisma) throw new Error('DB not configured');
+  return prisma;
+}
 
 export type AppDoc = {
-  _id: string;
-  owner_email: string;
+  id: string;
+  ownerId: string;
   name: string;
   website: string;
   one_liner: string;
@@ -14,8 +18,8 @@ export type AppDoc = {
   created_at: Date;
   updated_at: Date;
   is_public: boolean;
-  featured_rank?: number;
-  sponsor?: { tier: string; label?: string; href?: string };
+  featured_rank?: number | null;
+  sponsor?: { tier: string; label?: string; href?: string } | null;
   metrics?: {
     revenue_30d?: number;
     mrr?: number;
@@ -24,105 +28,116 @@ export type AppDoc = {
   };
 };
 
-function toPublic(a: any): AppDoc {
+function toDoc(a: any): AppDoc {
   return {
-    _id: String(a._id),
-    owner_email: a.owner_email,
-    name: a.name ?? '',
-    website: a.website ?? '',
-    one_liner: a.one_liner ?? '',
-    pain: a.pain ?? '',
-    description: a.description ?? '',
-    x_handle: a.x_handle ?? '',
-    category: a.category ?? '',
-    created_at: a.created_at ?? new Date(),
-    updated_at: a.updated_at ?? new Date(),
-    is_public: Boolean(a.is_public),
-    featured_rank: a.featured_rank,
-    sponsor: a.sponsor,
-    metrics: a.metrics,
+    id: a.id,
+    ownerId: a.ownerId,
+    name: a.name,
+    website: a.website,
+    one_liner: a.oneLiner,
+    pain: a.pain,
+    description: a.description,
+    x_handle: a.xHandle,
+    category: a.category,
+    created_at: a.createdAt,
+    updated_at: a.updatedAt,
+    is_public: a.isPublic,
+    featured_rank: a.featuredRank,
+    sponsor: a.sponsorTier
+      ? { tier: a.sponsorTier, label: a.sponsorLabel ?? undefined, href: a.sponsorHref ?? undefined }
+      : null,
+    metrics: undefined,
   };
 }
 
-function shouldBePublic(app: any): boolean {
+function shouldBePublic(app: Partial<AppDoc>): boolean {
   const required = [app.name, app.website, app.one_liner, app.pain, app.x_handle];
   return required.every((v) => (v ?? '').trim().length > 0);
 }
 
-export async function createApp(owner_email: string) {
-  if (!clientPromise) throw new Error('DB not configured');
-  const client = await clientPromise;
-  const db = client.db();
-  const now = new Date();
-
-  const doc = {
-    owner_email,
-    name: '',
-    website: '',
-    one_liner: '',
-    pain: '',
-    description: '',
-    x_handle: '',
-    category: 'Hosting',
-    created_at: now,
-    updated_at: now,
-    is_public: false,
-  };
-
-  const res = await db.collection('apps').insertOne(doc);
-  return { _id: String(res.insertedId) };
+export async function createApp(ownerId: string) {
+  const db = requireDb();
+  const row = await db.app.create({
+    data: {
+      ownerId,
+      name: '',
+      website: '',
+      oneLiner: '',
+      pain: '',
+      description: '',
+      xHandle: '',
+      category: 'Hosting',
+      isPublic: false,
+    },
+    select: { id: true },
+  });
+  return { id: row.id };
 }
 
-export async function getMyApps(owner_email: string): Promise<AppDoc[]> {
-  if (!clientPromise) return [];
-  const client = await clientPromise;
-  const db = client.db();
-  const rows = await db
-    .collection('apps')
-    .find({ owner_email })
-    .sort({ updated_at: -1 })
-    .limit(100)
-    .toArray();
-
-  return rows.map(toPublic);
+export async function getMyApps(ownerId: string): Promise<AppDoc[]> {
+  if (!prisma) return [];
+  try {
+    const rows = await prisma.app.findMany({
+      where: { ownerId },
+      orderBy: { updatedAt: 'desc' },
+      take: 100,
+    });
+    return rows.map(toDoc);
+  } catch {
+    return [];
+  }
 }
 
-export async function getAppByIdForUser(id: string, owner_email: string): Promise<AppDoc | null> {
-  if (!clientPromise) return null;
-  const client = await clientPromise;
-  const db = client.db();
-  const row = await db.collection('apps').findOne({ _id: new ObjectId(id), owner_email });
-  return row ? toPublic(row) : null;
+export async function getAppByIdForUser(id: string, ownerId: string): Promise<AppDoc | null> {
+  if (!prisma) return null;
+  try {
+    const row = await prisma.app.findFirst({ where: { id, ownerId } });
+    return row ? toDoc(row) : null;
+  } catch {
+    return null;
+  }
 }
 
-export async function updateApp(id: string, owner_email: string, patch: Partial<AppDoc>) {
-  if (!clientPromise) throw new Error('DB not configured');
-  const client = await clientPromise;
-  const db = client.db();
-  const now = new Date();
+export async function updateApp(id: string, ownerId: string, patch: Partial<AppDoc>) {
+  if (!prisma) throw new Error('DB not configured');
 
-  const next = {
+  const current = await prisma.app.findFirst({ where: { id, ownerId } });
+  if (!current) return;
+
+  const merged: AppDoc = {
+    ...toDoc(current),
     ...patch,
-    updated_at: now,
+    id,
+    ownerId,
   };
 
-  // Determine visibility automatically.
-  const row = await db.collection('apps').findOne({ _id: new ObjectId(id), owner_email });
-  const merged = { ...(row ?? {}), ...next };
-  (next as any).is_public = shouldBePublic(merged);
+  const isPublic = shouldBePublic(merged);
 
-  await db.collection('apps').updateOne({ _id: new ObjectId(id), owner_email }, { $set: next });
+  await prisma.app.update({
+    where: { id },
+    data: {
+      name: patch.name ?? undefined,
+      website: patch.website ?? undefined,
+      oneLiner: patch.one_liner ?? undefined,
+      pain: patch.pain ?? undefined,
+      description: patch.description ?? undefined,
+      xHandle: patch.x_handle ?? undefined,
+      category: patch.category ?? undefined,
+      isPublic,
+    },
+  });
 }
 
 export async function getPublicApps(): Promise<AppDoc[]> {
-  if (!clientPromise) return [];
-  const client = await clientPromise;
-  const db = client.db();
-  const rows = await db
-    .collection('apps')
-    .find({ is_public: true })
-    .sort({ featured_rank: -1, updated_at: -1 })
-    .limit(500)
-    .toArray();
-  return rows.map(toPublic);
+  if (!prisma) return [];
+  try {
+    const rows = await prisma.app.findMany({
+      where: { isPublic: true },
+      orderBy: [{ featuredRank: 'desc' }, { updatedAt: 'desc' }],
+      take: 500,
+    });
+    return rows.map(toDoc);
+  } catch {
+    return [];
+  }
 }

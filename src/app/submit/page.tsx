@@ -7,6 +7,6 @@ export const metadata = {
 
 export default async function SubmitPage() {
   const session = await getSession();
-  if (!session?.user) redirect('/login');
+  if (!session?.user?.id) redirect('/login');
   redirect('/dashboard/apps/new');
 }

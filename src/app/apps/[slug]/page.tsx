@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 import { getPublicApps } from '@/lib/db/apps';
 
 export async function generateStaticParams() {
@@ -12,7 +14,7 @@ export default async function AppPage({
 }) {
   const { slug } = await params;
   const apps = await getPublicApps();
-  const app = apps.find((a) => a._id === slug);
+  const app = apps.find((a) => a.id === slug);
   if (!app) notFound();
 
   return (

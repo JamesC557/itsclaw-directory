@@ -9,9 +9,9 @@ export const metadata = {
 
 export default async function DashboardPage() {
   const session = await getSession();
-  if (!session?.user?.email) redirect('/login');
+  if (!session?.user?.id) redirect('/login');
 
-  const apps = await getMyApps(session.user.email);
+  const apps = await getMyApps(session.user.id);
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -38,8 +38,8 @@ export default async function DashboardPage() {
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {apps.map((a) => (
           <Link
-            key={a._id}
-            href={`/dashboard/apps/${a._id}`}
+            key={a.id}
+            href={`/dashboard/apps/${a.id}`}
             className="rounded-2xl border border-white/10 bg-white/5 p-4 hover:bg-white/10"
           >
             <div className="text-lg font-semibold">{a.name || 'Untitled app'}</div>

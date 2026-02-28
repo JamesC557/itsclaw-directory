@@ -9,9 +9,9 @@ export default async function EditAppPage({
 }) {
   const { id } = await params;
   const session = await getSession();
-  if (!session?.user?.email) redirect('/login');
+  if (!session?.user?.id) redirect('/login');
 
-  const app = await getAppByIdForUser(id, session.user.email);
+  const app = await getAppByIdForUser(id, session.user.id);
   if (!app) redirect('/dashboard');
 
   return (
@@ -31,7 +31,7 @@ export default async function EditAppPage({
         className="mt-8 space-y-4"
         action={async (formData) => {
           'use server';
-          await updateApp(id, session.user!.email!, {
+          await updateApp(id, session.user!.id!, {
             name: String(formData.get('name') || ''),
             website: String(formData.get('website') || ''),
             one_liner: String(formData.get('one_liner') || ''),
